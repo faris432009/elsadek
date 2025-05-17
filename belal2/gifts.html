@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>هدايا دعائية - مطبعة الصادق</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Cairo', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #f9f9f9;
+      overflow-x: hidden;
+    }
+
+    .header {
+      background-color: #004d7a;
+      color: white;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .header-logo {
+      max-width: 6rem;
+      height: auto;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .header-logo:hover {
+      transform: scale(1.1);
+      opacity: 0.9;
+    }
+
+    .sign-in {
+      background-color: #ffcc00;
+      border: none;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      cursor: pointer;
+      border-radius: 4px;
+      color: black;
+      text-decoration: none;
+      flex-grow: 1;
+      text-align: center;
+      max-width: 150px;
+      margin: 0 auto;
+      transition: background-color 0.3s;
+    }
+
+    .sign-in:hover {
+      background-color: #e6b800;
+    }
+
+    .hamburger {
+      font-size: 1.2rem;
+      background-color: #004d7a;
+      color: white;
+      border: none;
+      cursor: pointer;
+      padding: 0.6rem 1.2rem;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 2.3rem;
+      min-width: 4rem;
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+    }
+
+    .hamburger:hover {
+      background-color: #026d9f;
+    }
+
+    .category-section {
+      background-color: white;
+      padding: 30px 15px;
+      text-align: right;
+    }
+
+    .category-content {
+      display: flex;
+      flex-direction: row-reverse;
+      align-items: stretch;
+      gap: 20px;
+      flex-wrap: wrap;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .category-content img {
+      width: 100%;
+      max-width: 600px;
+      height: auto;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+
+    .category-text {
+      flex: 1;
+      min-width: 250px;
+      padding: 10px;
+    }
+
+    .category-text h3 {
+      font-size: 24px;
+      margin-bottom: 15px;
+    }
+
+    .category-text li {
+      font-size: 16px;
+      line-height: 1.8;
+      list-style: none;
+      position: relative;
+      padding-right: 24px;
+    }
+
+    .category-text li::before {
+      content: '✔️';
+      position: absolute;
+      right: 0;
+      color: green;
+    }
+
+    .gallery-section {
+      background-color: #f9f9f9;
+      padding: 30px 15px;
+      text-align: right;
+    }
+
+    .gallery-section h3 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .gallery-item {
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 2px solid #004d7a;
+    }
+
+    .gallery-item:hover {
+      transform: scale(1.05);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      max-width: 90%;
+      max-height: 90%;
+      width: auto;
+      height: auto;
+      border-radius: 8px;
+      object-fit: contain;
+      transition: opacity 0.3s ease-in-out;
+      opacity: 0;
+    }
+
+    .modal-content.loaded {
+      opacity: 1;
+    }
+
+    .close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 30px;
+      color: white;
+      cursor: pointer;
+      background-color: rgba(0, 0, 0, 0.6);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s;
+    }
+
+    .close:hover {
+      background-color: rgba(0, 0, 0, 0.9);
+    }
+
+    .sidebar {
+      width: 100%;
+      max-width: 300px;
+      background: #004d7a;
+      color: white;
+      position: fixed;
+      top: -100%;
+      left: 0;
+      height: auto;
+      padding: 1.5rem 1rem;
+      transition: top 0.4s ease-in-out;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar.active {
+      top: 0;
+      z-index: 1001;
+      padding-top: 4.5rem;
+    }
+
+    .sidebar ul {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      max-height: 50vh;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #026d9f #004d7a;
+    }
+
+    .sidebar ul::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .sidebar ul::-webkit-scrollbar-track {
+      background: #004d7a;
+    }
+
+    .sidebar ul::-webkit-scrollbar-thumb {
+      background: #026d9f;
+      border-radius: 4px;
+    }
+
+    .sidebar ul li a {
+      display: block;
+      color: white;
+      padding: 0.6rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s;
+      font-size: 1.125rem;
+    }
+
+    .sidebar ul li a:hover {
+      background: #026d9f;
+    }
+
+    .sidebar .back-to-main {
+      display: block;
+      background-color: #ffcc00;
+      color: black;
+      text-align: center;
+      padding: 0.6rem;
+      margin-top: 1rem;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+
+    .sidebar .back-to-main:hover {
+      background-color: #e6b800;
+    }
+
+    footer {
+      background-color: #004d7a;
+      color: white;
+      padding: 2rem 1rem;
+      text-align: right;
+    }
+
+    .footer-content {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      max-width: 75rem;
+      margin: 0 auto;
+      justify-content: space-between;
+    }
+
+    .footer-section {
+      flex: 1;
+      min-width: 15rem;
+    }
+
+    .footer-logo {
+      max-width: 8rem;
+      height: auto;
+      margin-bottom: 1rem;
+      transition: transform 0.3s ease;
+      animation: pulse 2s infinite;
+    }
+
+    .footer-logo:hover {
+      transform: scale(1.05);
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .footer-section h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: #ffcc00;
+    }
+
+    .footer-section p {
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-section ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .footer-section ul li {
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-section ul li a {
+      color: #ffcc00;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: color 0.3s;
+    }
+
+    .footer-section ul li a:hover {
+      color: #e6b800;
+    }
+
+    .contact-info p i {
+      margin-left: 0.5rem;
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .social-icons a {
+      color: white;
+      font-size: 1.5rem;
+      transition: color 0.3s;
+    }
+
+    .social-icons a:hover {
+      color: #ffcc00;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      font-size: 0.9rem;
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.8s ease-in-out;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 1024px) {
+      .header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .sign-in {
+        margin: 0 auto;
+      }
+
+      .category-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .category-text {
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 430px) {
+      .header-logo {
+        max-width: 4rem;
+      }
+
+      .sign-in {
+        max-width: 120px;
+        font-size: 0.9rem;
+        padding: 0.4rem 0.8rem;
+      }
+
+      .hamburger {
+        font-size: 1.1rem;
+        padding: 0.5rem 1rem;
+        height: 2.1rem;
+        min-width: 3.5rem;
+      }
+
+      .sidebar.active {
+        padding-top: 3.5rem;
+      }
+
+      .gallery-item img {
+        height: 180px;
+      }
+
+      .category-text h3 {
+        font-size: 20px;
+      }
+
+      .category-text li {
+        font-size: 14px;
+      }
+
+      .footer-section {
+        flex: 100%;
+        text-align: center;
+      }
+
+      .footer-logo {
+        max-width: 6rem;
+      }
+
+      .social-icons {
+        justify-content: center;
+      }
+
+      .footer-section h3 {
+        font-size: 1.3rem;
+      }
+
+      .footer-section p,
+      .footer-section ul li a {
+        font-size: 0.9rem;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .header {
+        padding: 0.5rem;
+      }
+
+      .sign-in {
+        max-width: 100px;
+        font-size: 0.8rem;
+        padding: 0.3rem 0.6rem;
+      }
+
+      .hamburger {
+        font-size: 1rem;
+        padding: 0.4rem 0.8rem;
+        height: 2rem;
+        min-width: 3rem;
+      }
+
+      .sidebar.active {
+        padding-top: 3rem;
+      }
+
+      .gallery-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      }
+
+      .gallery-item img {
+        height: 150px;
+      }
+
+      .category-text h3 {
+        font-size: 18px;
+      }
+
+      .category-text li {
+        font-size: 13px;
+      }
+
+      .footer-section h3 {
+        font-size: 1.2rem;
+      }
+
+      .footer-section p,
+      .footer-section ul li a {
+        font-size: 0.85rem;
+      }
+
+      .social-icons a {
+        font-size: 1.3rem;
+      }
+
+      .footer-bottom {
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- الهيدر -->
+  <div class="header">
+    <img src="im/2.png" class="header-logo" alt="شعار مطبعة الصادق">
+    <a href="login.html" class="sign-in">تسجيل الدخول</a>
+    <button class="hamburger" id="hamburger">☰</button>
+  </div>
+
+  <!-- القائمة الجانبية -->
+  <div class="sidebar" id="sidebar">
+    <ul>
+      <li><a href="index.html">الرئيسية</a></li>
+      <li><a href="about.html">من نحن</a></li>
+      <li><a href="works.html">موقعنا</a></li>
+      <li><a href="contact.html">تواصل معنا</a></li>
+      <li><a href="krotes.html">كروت شخصية</a></li>
+      <li><a href="invitations.html">دعوات مناسبات وأفراح</a></li>
+      <li><a href="menus.html">المنيوهات</a></li>
+      <li><a href="banners.html">البنرات</a></li>
+      <li><a href="sobou3.html">كتالوجات</a></li>
+      <li><a href="papers.html">دروع تكريم</a></li>
+      <li><a href="certificates.html">شهادات تقدير</a></li>
+      <li><a href="gifts.html">هدايا دعائية</a></li>
+    </ul>
+    <a href="index.html" class="back-to-main">العودة للقائمة الرئيسية</a>
+  </div>
+
+  <!-- قسم الهدايا الدعائية -->
+  <div class="category-section fade-in">
+    <div class="category-content">
+      <img src="im/35.jpg" class="category-img" alt="تصميم هدايا دعائية" loading="lazy">
+      <div class="category-text">
+        <h3>هدايا دعائية مميزة</h3>
+        <p>هدايا مخصصة لتعزيز علامتك التجارية.</p>
+        <ul>
+          <li>تصميمات مبتكرة: أقلام، مجات، تيشرتات</li>
+          <li>خامات عالية الجودة للاستخدام اليومي</li>
+          <li>إضافات مميزة: طباعة شعارك أو تصميم خاص</li>
+          <li>أحجام وأشكال متنوعة حسب الطلب</li>
+          <li>طباعة عالية الدقة بألوان زاهية</li>
+          <li>تسليم سريع لتلبية احتياجاتك</li>
+        </ul>
+        <p>عزز حضورك التجاري بهدايا دعائية فريدة. تواصل معنا الآن!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- قسم المعرض -->
+  <div class="gallery-section fade-in">
+    <h3>معرض تصميمات الهدايا الدعائية</h3>
+    <div class="gallery-grid" id="galleryGrid">
+      <!-- سيتم ملء هذا القسم ديناميكيًا بواسطة JavaScript -->
+    </div>
+  </div>
+
+  <!-- النافذة المنبثقة (Modal) -->
+  <div class="modal" id="modal">
+    <span class="close" onclick="closeModal()">×</span>
+    <img class="modal-content" id="modal-image">
+  </div>
+
+  <!-- الفوتر -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <img src="im/2.png" class="footer-logo" alt="شعار مطبعة الصادق">
+        <h3>مطبعة الصادق</h3>
+        <p>نقدم خدمات طباعة متنوعة بجودة عالية تشمل كروت شخصية، دعوات مناسبات، بنرات، وأكثر. تواصلوا معنا لاكتشاف تجربة طباعة مميزة!</p>
+      </div>
+      <div class="footer-section">
+        <h3>روابط سريعة</h3>
+        <ul>
+          <li><a href="index.html">الرئيسية</a></li>
+          <li><a href="about.html">من نحن</a></li>
+          <li><a href="contact.html">تواصل معنا</a></li>
+          <li><a href="krotes.html">كروت شخصية</a></li>
+          <li><a href="banners.html">البنرات</a></li>
+        </ul>
+      </div>
+      <div class="footer-section contact-info">
+        <h3>تواصلوا معنا</h3>
+        <p><i class="fas fa-phone"></i> +201011445796</p>
+        <p><i class="fas fa-envelope"></i> Elsadekprint@gmail.com</p>
+        <div class="social-icons">
+          <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+          <a href="https://wa.me/+201011445796" target="_blank"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>جميع الحقوق محفوظة © 2025 مطبعة الصادق</p>
+    </div>
+  </footer>
+
+  <!-- سكريبت -->
+  <script>
+    const hamburger = document.getElementById("hamburger");
+    const sidebar = document.getElementById("sidebar");
+    const modal = document.getElementById("modal");
+    const modalImage = document.getElementById("modal-image");
+    const galleryGrid = document.getElementById("galleryGrid");
+
+    // Hamburger menu toggle
+    hamburger.addEventListener("click", (e) => {
+      e.stopPropagation();
+      sidebar.classList.toggle("active");
+      hamburger.textContent = sidebar.classList.contains("active") ? "✖" : "☰";
+    });
+
+    // Close sidebar when clicking outside
+    document.addEventListener("click", (e) => {
+      if (!sidebar.contains(e.target) && !hamburger.contains(e.target)) {
+        sidebar.classList.remove("active");
+        hamburger.textContent = "☰";
+      }
+    });
+
+    sidebar.addEventListener("click", (e) => {
+      e.stopPropagation();
+    });
+
+    // Modal functions
+    function openModal(src) {
+      modal.style.display = "flex";
+      modalImage.src = src;
+      modalImage.classList.remove('loaded');
+      modalImage.onload = () => {
+        modalImage.classList.add('loaded');
+      };
+    }
+
+    function closeModal() {
+      modal.style.display = "none";
+      modalImage.classList.remove('loaded');
+    }
+
+    // Close modal when clicking outside the image
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+
+    // Load and display products from localStorage
+    function displayProducts() {
+      const products = JSON.parse(localStorage.getItem("products")) || [];
+      const categoryProducts = products.filter(product => product.category === "هدايا دعائية");
+      let galleryHTML = "";
+
+      if (categoryProducts.length === 0) {
+        galleryHTML = "<p>لا توجد هدايا دعائية متاحة حاليًا.</p>";
+      } else {
+        categoryProducts.forEach((product, index) => {
+          const imageSrc = product.image.startsWith("data:image") ? product.image : product.image;
+          galleryHTML += `
+            <div class="gallery-item" onclick="openModal('${imageSrc}')">
+              <img src="${imageSrc}" alt="تصميم هدية دعائية ${index + 1}" loading="lazy" onerror="this.src='im/fallback.png'">
+            </div>
+          `;
+        });
+      }
+
+      galleryGrid.innerHTML = galleryHTML;
+    }
+
+    // Listen for localStorage changes
+    window.addEventListener('storage', (event) => {
+      if (event.key === 'products') {
+        displayProducts();
+      }
+    });
+
+    // Scroll animation
+    const faders = document.querySelectorAll('.fade-in');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.1 });
+
+    faders.forEach(fade => observer.observe(fade));
+
+    // Initialize gallery on page load
+    displayProducts();
+  </script>
+</body>
+</html>

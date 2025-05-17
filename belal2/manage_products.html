@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>إدارة المنتجات - مطبعة الصادق</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Cairo', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+      overflow-x: hidden;
+    }
+
+    body {
+      padding: 1rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 100%;
+      width: 100%;
+      margin: 0 auto;
+      background-color: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      position: relative;
+      flex: 1;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      margin-bottom: 1.2rem;
+      color: #004d7a;
+    }
+
+    .home-button, .products-button {
+      background-color: #ffcc00;
+      color: black;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      margin-top: 1.2rem;
+      display: inline-block;
+      text-decoration: none;
+      margin-left: 0.5rem;
+    }
+
+    .home-button:hover, .products-button:hover {
+      background-color: #e6b800;
+    }
+
+    .form-group {
+      margin-bottom: 0.8rem;
+      text-align: right;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 1rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 0.5rem;
+      font-size: 0.9rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .form-group textarea {
+      height: 80px;
+      resize: vertical;
+    }
+
+    .form-group select {
+      height: 2.2rem;
+    }
+
+    button {
+      background-color: #004d7a;
+      color: white;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      margin-top: 0.8rem;
+    }
+
+    button:hover {
+      background-color: #026d9f;
+    }
+
+    .products-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1.5rem;
+    }
+
+    .products-table th,
+    .products-table td {
+      border: 1px solid #ccc;
+      padding: 0.6rem;
+      text-align: right;
+      font-size: 0.9rem;
+    }
+
+    .products-table th {
+      background-color: #004d7a;
+      color: white;
+    }
+
+    .products-table img {
+      max-width: 80px;
+      height: auto;
+      border-radius: 4px;
+    }
+
+    .delete-btn {
+      background-color: #ff4444;
+      margin-left: 0.4rem;
+    }
+
+    .delete-btn:hover {
+      background-color: #cc0000;
+    }
+
+    .edit-btn {
+      background-color: #ffcc00;
+      color: black;
+    }
+
+    .edit-btn:hover {
+      background-color: #e6b800;
+    }
+
+    .undo-btn {
+      background-color: #ff9900;
+      color: white;
+      margin-left: 0.4rem;
+      display: none;
+    }
+
+    .undo-btn:hover {
+      background-color: #e68a00;
+    }
+
+    .error, .success {
+      margin-top: 0.4rem;
+      padding: 0.4rem;
+      border-radius: 4px;
+      display: none;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    .error {
+      color: red;
+      background-color: #ffe6e6;
+    }
+
+    .success {
+      color: green;
+      background-color: #e6ffe6;
+    }
+
+    .hamburger {
+      font-size: 1.1rem;
+      background-color: #004d7a;
+      color: white;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 2.1rem;
+      min-width: 3.5rem;
+      position: absolute;
+      top: 0.4rem;
+      right: 0.5rem;
+      z-index: 1002;
+    }
+
+    .hamburger:hover {
+      background-color: #026d9f;
+    }
+
+    .sidebar {
+      width: 100%;
+      max-width: 280px;
+      background: #004d7a;
+      color: white;
+      position: fixed;
+      top: -100%;
+      left: 0;
+      height: auto;
+      padding: 1.5rem 1rem 1rem;
+      transition: top 0.4s ease-in-out;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar.active {
+      top: 0;
+      left: 0;
+      right: auto;
+      z-index: 1001;
+    }
+
+    .sidebar ul {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      max-height: 60vh;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #026d9f #004d7a;
+    }
+
+    .sidebar ul::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .sidebar ul::-webkit-scrollbar-track {
+      background: #004d7a;
+    }
+
+    .sidebar ul::-webkit-scrollbar-thumb {
+      background: #026d9f;
+      border-radius: 4px;
+    }
+
+    .sidebar ul li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.4rem 0;
+    }
+
+    .sidebar ul li a {
+      color: white;
+      text-decoration: none;
+      transition: background-color 0.3s;
+      font-size: 1rem;
+      flex: 1;
+      padding: 0.4rem;
+      border-radius: 4px;
+    }
+
+    .sidebar ul li a:hover {
+      background: #026d9f;
+    }
+
+    .sidebar ul li button {
+      background-color: #ffcc00;
+      color: black;
+      padding: 0.2rem 0.5rem;
+      font-size: 0.8rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .sidebar .button-container {
+      display: flex;
+      gap: 0.4rem;
+      margin-top: 0.8rem;
+    }
+
+    .sidebar .back-to-main {
+      flex: 1;
+      background-color: #ffcc00;
+      color: black;
+      text-align: center;
+      padding: 0.5rem;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+      font-size: 0.9rem;
+    }
+
+    .sidebar .back-to-main:hover {
+      background-color: #e6b800;
+    }
+
+    .products-sidebar {
+      width: 100%;
+      max-width: 280px;
+      background: #026d9f;
+      color: white;
+      position: fixed;
+      top: -100%;
+      left: 0;
+      height: auto;
+      padding: 1.5rem 1rem 1rem;
+      transition: top 0.4s ease-in-out;
+      z-index: 998;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .products-sidebar.active {
+      top: 0;
+      left: 280px;
+      right: auto;
+    }
+
+    .products-sidebar h3 {
+      color: #ffcc00;
+      font-size: 1.1rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .products-sidebar ul {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      max-height: 60vh;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #004d7a #026d9f;
+    }
+
+    .products-sidebar ul::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .products-sidebar ul::-webkit-scrollbar-track {
+      background: #026d9f;
+    }
+
+    .products-sidebar ul::-webkit-scrollbar-thumb {
+      background: #004d7a;
+      border-radius: 4px;
+    }
+
+    .products-sidebar ul li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.4rem 0;
+    }
+
+    .products-sidebar ul li span {
+      flex: 1;
+      padding: 0.4rem;
+      font-size: 0.9rem;
+    }
+
+    .products-sidebar ul li button {
+      background-color: #ffcc00;
+      color: black;
+      padding: 0.2rem 0.5rem;
+      font-size: 0.8rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 480px) {
+      body {
+        padding: 0.5rem;
+      }
+
+      .container {
+        padding: 1rem;
+      }
+
+      h1 {
+        font-size: 1.3rem;
+      }
+
+      .home-button, .products-button {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.8rem;
+      }
+
+      .form-group label {
+        font-size: 0.9rem;
+      }
+
+      .form-group input,
+      .form-group textarea,
+      .form-group select {
+        font-size: 0.8rem;
+        padding: 0.4rem;
+      }
+
+      button {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.8rem;
+      }
+
+      .products-table th,
+      .products-table td {
+        font-size: 0.8rem;
+        padding: 0.4rem;
+      }
+
+      .products-table img {
+        max-width: 60px;
+      }
+
+      .delete-btn, .edit-btn, .undo-btn {
+        margin-left: 0.2rem;
+        padding: 0.3rem 0.6rem;
+        font-size: 0.8rem;
+      }
+
+      .hamburger {
+        font-size: 1rem;
+        padding: 0.4rem 0.8rem;
+        height: 1.9rem;
+        min-width: 3rem;
+        top: 0.2rem;
+        right: 0.3rem;
+      }
+
+      .sidebar, .products-sidebar {
+        max-width: 100%;
+        padding: 1rem;
+      }
+
+      .products-sidebar.active {
+        left: 0;
+      }
+
+      .sidebar.active {
+        left: 0;
+      }
+
+      .sidebar .button-container {
+        flex-direction: column;
+        gap: 0.4rem;
+      }
+    }
+
+    @media (min-width: 481px) and (max-width: 768px) {
+      body {
+        padding: 1rem;
+      }
+
+      .container {
+        padding: 1.2rem;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .products-table img {
+        max-width: 70px;
+      }
+
+      .sidebar, .products-sidebar {
+        max-width: 300px;
+      }
+
+      .products-sidebar.active {
+        left: 300px;
+      }
+    }
+
+    @media (min-width: 769px) {
+      body {
+        padding: 2rem;
+      }
+
+      .container {
+        max-width: 900px;
+        padding: 2rem;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      .products-table img {
+        max-width: 100px;
+      }
+
+      .sidebar, .products-sidebar {
+        max-width: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <button class="hamburger" id="hamburger">☰</button>
+    <h1>إدارة المنتجات</h1>
+    <div class="form-group">
+      <label for="productName">اسم المنتج</label>
+      <input type="text" id="productName" placeholder="أدخل اسم المنتج">
+    </div>
+    <div class="form-group">
+      <label for="productImage">صورة المنتج</label>
+      <input type="file" id="productImage" accept="image/*">
+      <div id="dropArea" style="border: 2px dashed #ccc; padding: 0.8rem; margin-top: 0.4rem; text-align: center;">
+        اسحب الصورة هنا أو انقر لتحميلها
+      </div>
+      <p id="imagePreviewLabel" style="margin-top: 0.4rem; display: none;">معاينة الصورة:</p>
+      <img id="imagePreview" style="max-width: 180px; display: none; margin-top: 0.4rem; border-radius: 4px;" alt="معاينة الصورة">
+    </div>
+    <div class="form-group">
+      <label for="productDescription">وصف المنتج</label>
+      <textarea id="productDescription" placeholder="أدخل وصف المنتج"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="productCategory">فئة المنتج</label>
+      <select id="productCategory">
+        <option value="">اختر فئة</option>
+        <option value="كروت شخصية">كروت شخصية</option>
+        <option value="دعوات أفراح">دعوات أفراح</option>
+        <option value="المنيوهات">المنيوهات</option>
+        <option value="البنرات">البنرات</option>
+        <option value="الكتالوجات">الكتالوجات</option>
+        <option value="دروع تكريم">دروع تكريم</option>
+        <option value="شهادات تقدير">شهادات تقدير</option>
+        <option value="هدايا دعائية">هدايا دعائية</option>
+        <option value="منتجاتنا">منتجاتنا</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="imageOrder">ترتيب الصورة</label>
+      <input type="number" id="imageOrder" min="1" placeholder="أدخل ترتيب الصورة (1 للأول، 2 للثاني...)">
+    </div>
+    <button id="actionButton" onclick="confirmAdd()">إضافة المنتج</button>
+    <button id="undoButton" class="undo-btn" onclick="confirmUndo()">إلغاء العملية</button>
+    <div id="errorMessage" class="error"></div>
+    <div id="successMessage" class="success"></div>
+
+    <table class="products-table">
+      <thead>
+        <tr>
+          <th>اسم المنتج</th>
+          <th>الصورة</th>
+          <th>الوصف</th>
+          <th>الفئة</th>
+          <th>ترتيب الصورة</th>
+          <th>إجراء</th>
+        </tr>
+      </thead>
+      <tbody id="productsTableBody"></tbody>
+    </table>
+
+    <div style="margin-top: 1.2rem;">
+      <a href="index.html" class="home-button">العودة للصفحة الرئيسية</a>
+      <a href="javascript:window.location.reload();" class="products-button">العودة لإدارة المنتجات</a>
+    </div>
+  </div>
+
+  <div class="sidebar" id="sidebar">
+    <ul id="sidebarLinks">
+      <li>
+        <a href="krotes.html">كروت شخصية</a>
+      </li>
+      <li>
+        <a href="invitations.html">دعوات أفراح</a>
+      </li>
+      <li>
+        <a href="menus.html">المنيوهات</a>
+      </li>
+      <li>
+        <a href="banners.html">البنرات</a>
+      </li>
+      <li>
+        <a href="sobou3.html">الكتالوجات</a>
+      </li>
+      <li>
+        <a href="papers.html">دروع تكريم</a>
+      </li>
+      <li>
+        <a href="certificates.html">شهادات تقدير</a>
+      </li>
+      <li>
+        <a href="gifts.html">هدايا دعائية</a>
+      </li>
+      <li>
+        <a href="#" onclick="filterProducts('منتجاتنا')">منتجاتنا</a>
+      </li>
+    </ul>
+    <div class="button-container">
+      <a href="index.html" class="back-to-main">العودة للقائمة الرئيسية</a>
+    </div>
+  </div>
+
+  <div class="products-sidebar" id="productsSidebar">
+    <h3>المنتجات</h3>
+    <ul id="productsSidebarList"></ul>
+  </div>
+
+  <script>
+    // Password protection
+    const correctPassword = "432009";
+    const enteredPassword = prompt("أدخل كلمة السر:");
+    if (enteredPassword !== correctPassword) {
+      alert("كلمة السر غير صحيحة!");
+      window.location.href = "index.html";
+    }
+
+    // Load products from localStorage or initialize with default
+    let products = JSON.parse(localStorage.getItem("products")) || [
+      { id: 1, name: "كارت شخصي 1", image: "im/6.jpg", description: "كارت شخصي بتصميم أنيق", category: "كروت شخصية", imageOrder: 1 },
+      { id: 2, name: "كارت شخصي 2", image: "im/8.jpg", description: "كارت شخصي احترافي", category: "كروت شخصية", imageOrder: 2 },
+      { id: 3, name: "كارت شخصي 3", image: "im/9.jpg", description: "كارت شخصي عصري", category: "كروت شخصية", imageOrder: 3 },
+      { id: 4, name: "دعوة أفراح 1", image: "im/10.jpg", description: "دعوة أفراح فاخرة", category: "دعوات أفراح", imageOrder: 1 },
+      { id: 5, name: "دعوة أفراح 2", image: "im/11.jpg", description: "دعوة أفراح مميزة", category: "دعوات أفراح", imageOrder: 2 },
+      { id: 6, name: "دعوة أفراح 3", image: "im/13.jpg", description: "دعوة أفراح بجودة عالية", category: "دعوات أفراح", imageOrder: 3 },
+      { id: 7, name: "منيو 1", image: "im/14.jpg", description: "منيو مطعم أنيق", category: "المنيوهات", imageOrder: 1 },
+      { id: 8, name: "منيو 2", image: "im/15.jpg", description: "منيو مطعم عصري", category: "المنيوهات", imageOrder: 2 },
+      { id: 9, name: "منيو 3", image: "im/16.jpg", description: "منيو مطعم احترافي", category: "المنيوهات", imageOrder: 3 },
+      { id: 10, name: "بنر إعلاني 1", image: "im/19.jpg", description: "بنر إعلاني مميز للمناسبات", category: "البنرات", imageOrder: 1 },
+      { id: 11, name: "بنر إعلاني 2", image: "im/21.jpg", description: "بنر إعلاني بتصميم عصري", category: "البنرات", imageOrder: 2 },
+      { id: 12, name: "بنر إعلاني 3", image: "im/22.jpg", description: "بنر إعلاني عالي الجودة", category: "البنرات", imageOrder: 3 },
+      { id: 13, name: "كتالوج 1", image: "im/23.jpg", description: "كتالوج احترافي لعرض المنتجات", category: "الكتالوجات", imageOrder: 1 },
+      { id: 14, name: "كتالوج 2", image: "im/25.jpg", description: "كتالوج بتصميم مميز", category: "الكتالوجات", imageOrder: 2 },
+      { id: 15, name: "كتالوج 3", image: "im/26.jpg", description: "كتالوج عالي الجودة", category: "الكتالوجات", imageOrder: 3 },
+      { id: 16, name: "درع تكريم 1", image: "im/27.jpg", description: "درع تكريم أنيق", category: "دروع تكريم", imageOrder: 1 },
+      { id: 17, name: "درع تكريم 2", image: "im/28.jpg", description: "درع تكريم فاخر", category: "دروع تكريم", imageOrder: 2 },
+      { id: 18, name: "درع تكريم 3", image: "im/29.jpg", description: "درع تكريم احترافي", category: "دروع تكريم", imageOrder: 3 },
+      { id: 19, name: "شهادة تقدير 1", image: "im/30.jpg", description: "شهادة تقدير بتصميم مميز", category: "شهادات تقدير", imageOrder: 1 },
+      { id: 20, name: "شهادة تقدير 2", image: "im/31.jpg", description: "شهادة تقدير عالية الجودة", category: "شهادات تقدير", imageOrder: 2 },
+      { id: 21, name: "شهادة تقدير 3", image: "im/32.jpg", description: "شهادة تقدير أنيقة", category: "شهادات تقدير", imageOrder: 3 },
+      { id: 22, name: "هدية دعائية 1", image: "im/33.jpg", description: "هدية دعائية مميزة", category: "هدايا دعائية", imageOrder: 1 },
+      { id: 23, name: "هدية دعائية 2", image: "im/34.jpg", description: "هدية دعائية عصرية", category: "هدايا دعائية", imageOrder: 2 },
+      { id: 24, name: "هدية دعائية 3", image: "im/35.jpg", description: "هدية دعائية احترافية", category: "هدايا دعائية", imageOrder: 3 }
+    ];
+
+    // Save products to localStorage if not already saved
+    if (!localStorage.getItem("products")) {
+      localStorage.setItem("products", JSON.stringify(products));
+    }
+
+    // State to track if editing and undo functionality
+    let editingProductId = null;
+    let previousProducts = null;
+    let lastAction = null;
+    let selectedImage = null;
+    let currentCategoryFilter = null;
+
+    // Image compression function
+    function compressImage(file, callback) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.src = e.target.result;
+        img.onload = function() {
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+          const maxWidth = 800;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > maxWidth) {
+            height = (maxWidth / width) * height;
+            width = maxWidth;
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          ctx.drawImage(img, 0, 0, width, height);
+          canvas.toBlob(
+            (blob) => {
+              const compressedFile = new File([blob], file.name, { type: file.type });
+              callback(compressedFile);
+            },
+            "image/jpeg",
+            0.7
+          );
+        };
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Handle file input and drag-and-drop
+    const productImageInput = document.getElementById("productImage");
+    const dropArea = document.getElementById("dropArea");
+    const imagePreview = document.getElementById("imagePreview");
+    const imagePreviewLabel = document.getElementById("imagePreviewLabel");
+
+    function handleImageFile(file) {
+      compressImage(file, (compressedFile) => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          selectedImage = e.target.result;
+          imagePreview.src = selectedImage;
+          imagePreview.style.display = "block";
+          imagePreviewLabel.style.display = "block";
+          dropArea.style.borderColor = "#004d7a";
+        };
+        reader.readAsDataURL(compressedFile);
+      });
+    }
+
+    productImageInput.addEventListener("change", function(e) {
+      if (e.target.files[0]) {
+        handleImageFile(e.target.files[0]);
+      }
+    });
+
+    dropArea.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      dropArea.style.borderColor = "#ffcc00";
+    });
+
+    dropArea.addEventListener("dragleave", () => {
+      dropArea.style.borderColor = "#ccc";
+    });
+
+    dropArea.addEventListener("drop", (e) => {
+      e.preventDefault();
+      dropArea.style.borderColor = "#ccc";
+      if (e.dataTransfer.files[0]) {
+        handleImageFile(e.dataTransfer.files[0]);
+        productImageInput.files = e.dataTransfer.files;
+      }
+    });
+
+    dropArea.addEventListener("click", () => {
+      productImageInput.click();
+    });
+
+    // Display products in the table and sidebar
+    function displayProducts(categoryFilter = null) {
+      const tableBody = document.getElementById("productsTableBody");
+      const productsSidebarList = document.getElementById("productsSidebarList");
+      let filteredProducts = categoryFilter ? products.filter(p => p.category === categoryFilter) : products;
+      // Sort products by imageOrder
+      filteredProducts.sort((a, b) => (a.imageOrder || 1) - (b.imageOrder || 1));
+      let tableHTML = "";
+      let sidebarHTML = "";
+      filteredProducts.forEach(product => {
+        const imageSrc = product.image.startsWith("data:image") ? product.image : product.image;
+        tableHTML += `
+          <tr>
+            <td>${product.name}</td>
+            <td><img src="${imageSrc}" alt="${product.name}" onerror="this.src='im/fallback.png'"></td>
+            <td>${product.description || "لا يوجد وصف"}</td>
+            <td>${product.category || "غير مصنف"}</td>
+            <td>${product.imageOrder || 1}</td>
+            <td>
+              <button class="edit-btn" onclick="editProduct(${product.id})">تعديل</button>
+              <button class="delete-btn" onclick="deleteProduct(${product.id})">حذف</button>
+            </td>
+          </tr>
+        `;
+        sidebarHTML += `
+          <li>
+            <span>${product.name}</span>
+            <button class="edit-btn" onclick="editProduct(${product.id})">تعديل</button>
+          </li>
+        `;
+      });
+      tableBody.innerHTML = tableHTML;
+      productsSidebarList.innerHTML = sidebarHTML;
+    }
+
+    // Display links in the sidebar with category filters and navigation
+    function displayLinks() {
+      const sidebarLinks = document.getElementById("sidebarLinks");
+      let linksHTML = `
+        <li>
+          <a href="krotes.html">كروت شخصية</a>
+        </li>
+        <li>
+          <a href="invitations.html">دعوات أفراح</a>
+        </li>
+        <li>
+          <a href="menus.html">المنيوهات</a>
+        </li>
+        <li>
+          <a href="banners.html">البنرات</a>
+        </li>
+        <li>
+          <a href="sobou3.html">الكتالوجات</a>
+        </li>
+        <li>
+          <a href="papers.html">دروع تكريم</a>
+        </li>
+        <li>
+          <a href="certificates.html">شهادات تقدير</a>
+        </li>
+        <li>
+          <a href="gifts.html">هدايا دعائية</a>
+        </li>
+        <li>
+          <a href="#" onclick="filterProducts('منتجاتنا')">منتجاتنا</a>
+        </li>
+      `;
+      sidebarLinks.innerHTML = linksHTML;
+
+      // Add event listeners for category filtering
+      const sidebarLinksItems = sidebarLinks.querySelectorAll("li a");
+      const productsSidebar = document.getElementById("productsSidebar");
+
+      sidebarLinksItems.forEach(link => {
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+          const category = link.textContent.trim();
+          currentCategoryFilter = category;
+          displayProducts(category);
+          productsSidebar.classList.add("active");
+          sidebarLinksItems.forEach(l => l.style.backgroundColor = "");
+          link.style.backgroundColor = "#026d9f";
+        });
+      });
+    }
+
+    // Confirm add product
+    function confirmAdd() {
+      if (confirm("هل أنت متأكد من إضافة المنتج؟")) {
+        if (editingProductId) {
+          saveEdit();
+        } else {
+          addProduct();
+        }
+      }
+    }
+
+    // Add product
+    function addProduct() {
+      const name = document.getElementById("productName").value.trim();
+      const description = document.getElementById("productDescription").value.trim();
+      const category = document.getElementById("productCategory").value;
+      const imageOrder = parseInt(document.getElementById("imageOrder").value) || 1;
+      const errorMessage = document.getElementById("errorMessage");
+      const successMessage = document.getElementById("successMessage");
+      const undoButton = document.getElementById("undoButton");
+
+      if (!name || !selectedImage || !category) {
+        errorMessage.textContent = "الرجاء إدخال اسم المنتج، صورة المنتج، والفئة";
+        errorMessage.style.display = "block";
+        setTimeout(() => {
+          errorMessage.style.display = "none";
+          errorMessage.textContent = "";
+        }, 3000);
+        return;
+      }
+
+      previousProducts = [...products];
+      lastAction = "add";
+
+      const newProduct = {
+        id: products.length ? Math.max(...products.map(p => p.id)) + 1 : 1,
+        name,
+        image: selectedImage,
+        description,
+        category,
+        imageOrder
+      };
+      products.push(newProduct);
+      adjustOrder(newProduct); // Adjust order after adding
+      localStorage.setItem("products", JSON.stringify(products));
+      displayProducts(currentCategoryFilter);
+      resetProductForm();
+      successMessage.textContent = "تم إضافة المنتج بنجاح. يمكنك التراجع خلال 10 ثوانٍ.";
+      successMessage.style.display = "block";
+      setTimeout(() => {
+        successMessage.style.display = "none";
+        successMessage.textContent = "";
+      }, 3000);
+
+      undoButton.style.display = "inline-block";
+      setTimeout(() => {
+        undoButton.style.display = "none";
+        previousProducts = null;
+        lastAction = null;
+      }, 10000);
+    }
+
+    // Confirm undo action
+    function confirmUndo() {
+      if (confirm("هل أنت متأكد من التراجع عن العملية؟")) {
+        undoAction();
+      }
+    }
+
+    // Undo last action
+    function undoAction() {
+      if (previousProducts) {
+        products = [...previousProducts];
+        localStorage.setItem("products", JSON.stringify(products));
+        displayProducts(currentCategoryFilter);
+        resetProductForm();
+        const successMessage = document.getElementById("successMessage");
+        const undoButton = document.getElementById("undoButton");
+        successMessage.textContent = "تم التراجع عن العملية بنجاح";
+        successMessage.style.display = "block";
+        setTimeout(() => {
+          successMessage.style.display = "none";
+          successMessage.textContent = "";
+        }, 3000);
+        undoButton.style.display = "none";
+        previousProducts = null;
+        lastAction = null;
+      }
+    }
+
+    // Edit product
+    function editProduct(id) {
+      const product = products.find(p => p.id === id);
+      if (product) {
+        document.getElementById("productName").value = product.name;
+        document.getElementById("productDescription").value = product.description || "";
+        document.getElementById("productCategory").value = product.category || "";
+        imagePreview.src = product.image.startsWith("data:image") ? product.image : product.image;
+        imagePreview.style.display = "block";
+        imagePreviewLabel.style.display = "block";
+        selectedImage = product.image; // Keep the original image initially
+        document.getElementById("imageOrder").value = product.imageOrder || 1;
+        document.getElementById("actionButton").textContent = "حفظ التعديلات";
+        editingProductId = id;
+
+        // Clear the input file to allow selecting a new image
+        document.getElementById("productImage").value = "";
+      }
+    }
+
+    // Save edited product with order adjustment
+    function saveEdit() {
+      const name = document.getElementById("productName").value.trim();
+      const description = document.getElementById("productDescription").value.trim();
+      const category = document.getElementById("productCategory").value;
+      const imageOrder = parseInt(document.getElementById("imageOrder").value) || 1;
+      const errorMessage = document.getElementById("errorMessage");
+      const successMessage = document.getElementById("successMessage");
+      const undoButton = document.getElementById("undoButton");
+
+      if (!name || !selectedImage || !category) {
+        errorMessage.textContent = "الرجاء إدخال اسم المنتج، صورة المنتج، والفئة";
+        errorMessage.style.display = "block";
+        setTimeout(() => {
+          errorMessage.style.display = "none";
+          errorMessage.textContent = "";
+        }, 3000);
+        return;
+      }
+
+      previousProducts = [...products];
+      lastAction = "edit";
+
+      const oldProduct = products.find(p => p.id === editingProductId);
+      const oldOrder = oldProduct.imageOrder || 1;
+      products = products.map(product =>
+        product.id === editingProductId
+          ? { ...product, name, image: selectedImage, description, category, imageOrder }
+          : product
+      );
+      adjustOrder({ id: editingProductId, imageOrder }, oldOrder); // Adjust order after editing
+      localStorage.setItem("products", JSON.stringify(products));
+      displayProducts(currentCategoryFilter);
+      resetProductForm();
+      successMessage.textContent = "تم تعديل المنتج بنجاح. يمكنك التراجع خلال 10 ثوانٍ.";
+      successMessage.style.display = "block";
+      setTimeout(() => {
+        successMessage.style.display = "none";
+        successMessage.textContent = "";
+      }, 3000);
+
+      undoButton.style.display = "inline-block";
+      setTimeout(() => {
+        undoButton.style.display = "none";
+        previousProducts = null;
+        lastAction = null;
+      }, 10000);
+    }
+
+    // Adjust order to handle swapping
+    function adjustOrder(updatedProduct, oldOrder = null) {
+      const sameCategoryProducts = products.filter(p => p.category === updatedProduct.category);
+      if (oldOrder !== null && oldOrder !== updatedProduct.imageOrder) {
+        // Swap positions if order changed
+        const otherProduct = sameCategoryProducts.find(p => p.id !== updatedProduct.id && p.imageOrder === updatedProduct.imageOrder);
+        if (otherProduct) {
+          otherProduct.imageOrder = oldOrder; // Swap the old order with the other product
+          products = products.map(p =>
+            p.id === otherProduct.id ? { ...p, imageOrder: oldOrder } : p
+          );
+        }
+      }
+      // Ensure unique imageOrder values by reassigning if necessary
+      const usedOrders = new Set(sameCategoryProducts.map(p => p.imageOrder));
+      let nextOrder = 1;
+      sameCategoryProducts.forEach(product => {
+        if (!usedOrders.has(nextOrder)) {
+          product.imageOrder = nextOrder;
+          usedOrders.add(nextOrder);
+        }
+        nextOrder++;
+      });
+      localStorage.setItem("products", JSON.stringify(products));
+    }
+
+    // Delete product
+    function deleteProduct(id) {
+      if (confirm("هل أنت متأكد من حذف هذا المنتج؟")) {
+        previousProducts = [...products];
+        lastAction = "delete";
+        const productToDelete = products.find(p => p.id === id);
+        const deletedOrder = productToDelete.imageOrder;
+        products = products.filter(product => product.id !== id);
+        // Reassign imageOrder for remaining products in the same category
+        const remainingProducts = products.filter(p => p.category === productToDelete.category);
+        remainingProducts.sort((a, b) => a.imageOrder - b.imageOrder);
+        let order = 1;
+        remainingProducts.forEach(product => {
+          product.imageOrder = order++;
+        });
+        localStorage.setItem("products", JSON.stringify(products));
+        displayProducts(currentCategoryFilter);
+        const successMessage = document.getElementById("successMessage");
+        const undoButton = document.getElementById("undoButton");
+        successMessage.textContent = "تم حذف المنتج بنجاح. يمكنك التراجع خلال 10 ثوانٍ.";
+        successMessage.style.display = "block";
+        setTimeout(() => {
+          successMessage.style.display = "none";
+          successMessage.textContent = "";
+        }, 3000);
+
+        undoButton.style.display = "inline-block";
+        setTimeout(() => {
+          undoButton.style.display = "none";
+          previousProducts = null;
+          lastAction = null;
+        }, 10000);
+      }
+    }
+
+    // Filter products by category
+    function filterProducts(category) {
+      currentCategoryFilter = category;
+      displayProducts(category);
+    }
+
+    // Reset product form
+    function resetProductForm() {
+      document.getElementById("productName").value = "";
+      document.getElementById("productImage").value = "";
+      document.getElementById("productDescription").value = "";
+      document.getElementById("productCategory").value = "";
+      document.getElementById("imageOrder").value = "";
+      imagePreview.src = "";
+      imagePreview.style.display = "none";
+      imagePreviewLabel.style.display = "none";
+      selectedImage = null;
+      document.getElementById("actionButton").textContent = "إضافة المنتج";
+      editingProductId = null;
+    }
+
+    // Hamburger menu and sidebar functionality
+    const hamburger = document.getElementById("hamburger");
+    const sidebar = document.getElementById("sidebar");
+    const productsSidebar = document.getElementById("productsSidebar");
+
+    hamburger.addEventListener("click", (e) => {
+      e.stopPropagation();
+      sidebar.classList.toggle("active");
+      hamburger.textContent = sidebar.classList.contains("active") ? "✖" : "☰";
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!sidebar.contains(e.target) && !hamburger.contains(e.target)) {
+        sidebar.classList.remove("active");
+        productsSidebar.classList.remove("active");
+        hamburger.textContent = "☰";
+      }
+    });
+
+    sidebar.addEventListener("click", (e) => {
+      e.stopPropagation();
+    });
+
+    productsSidebar.addEventListener("click", (e) => {
+      e.stopPropagation();
+    });
+
+    // Close sidebar when a link is clicked
+    sidebar.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", () => {
+        sidebar.classList.remove("active");
+        hamburger.textContent = "☰";
+      });
+    });
+
+    // Initialize on page load
+    displayProducts();
+    displayLinks();
+  </script>
+</body>
+</html>
